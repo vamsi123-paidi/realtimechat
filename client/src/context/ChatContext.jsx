@@ -21,18 +21,35 @@ export const ChatContextProvider = ({ children, user }) => {
   const [allUsers, setAllUsers] = useState([]);
 
   // initial socket
-  useEffect(() => {
-    const newSocket = io(
-      import.meta.env.MODE === "production"
-        ? "https://mern-chat-socket.onrender.com"
-        : "http://localhost:3000",
-    );
-    setSocket(newSocket);
+useEffect(() => {
+  const newSocket = io(
+    import.meta.env.MODE === "production"
+      ? "https://realtimechat-1-gpm1.onrender.com"  // Your Render backend URL
+      : "http://localhost:5000",                   // Should match your local backend port
+    {
+      withCredentials: true,
+      transports: ['websocket'],
+      autoConnect: true,
+    }
+  );
 
-    return () => {
-      newSocket.disconnect();
-    };
-  }, [user]);
+  setSocket(newSocket);
+
+  // Socket event listeners can be added here
+  newSocket.on('connect', () => {
+    console.log('Socket connected:', newSocket.id);
+  });
+
+  newSocket.on('connect_error', (error) => {
+    console.error('Socket connection error:', error.message);
+  });
+
+  return () => {
+    newSocket.off('connect');
+    newSocket.off('connect_error');
+    newSocket.disconnect();
+  };
+}, [user]);
 
   // add online users
   useEffect(() => {

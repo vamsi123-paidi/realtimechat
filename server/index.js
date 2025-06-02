@@ -24,7 +24,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: process.env.NODE_ENV === "production" 
-      ? ["https://realtimechatapp-opal.vercel.app", "https://your-render-app.onrender.com"] 
+      ? ["https://realtimechatapp-opal.vercel.app", "https://realtimechat-1-gpm1.onrender.com"] 
       : "http://localhost:5173",
     credentials: true
   }
@@ -37,7 +37,7 @@ connectDB();
 app.use(express.json());
 app.use(cors({
   origin: process.env.NODE_ENV === "production" 
-    ? ["https://realtimechatapp-opal.vercel.app", "https://your-render-app.onrender.com"]
+    ? ["https://realtimechatapp-opal.vercel.app", "https://realtimechat-1-gpm1.onrender.com"]
     : "http://localhost:5173",
   credentials: true
 }));

@@ -21,11 +21,14 @@ const app = express();
 const httpServer = createServer(app);
 
 // Initialize Socket.io
-const io = new Server(httpServer, {
+const io = new Server(httpServer,{
   cors: {
-    origin: process.env.NODE_ENV === "production" 
-      ? ["https://realtimechatapp-opal.vercel.app", "https://realtimechat-1-gpm1.onrender.com"] 
-      : "http://localhost:5173",
+    origin: [
+      'https://realtimechatapp-opal.vercel.app',
+      'https://realtimechat-1-gpm1.onrender.com',
+      'http://localhost:5173'
+    ],
+    methods: ['GET', 'POST'],
     credentials: true
   }
 });
@@ -35,12 +38,18 @@ connectDB();
 
 // Express middleware
 app.use(express.json());
-app.use(cors({
-  origin: process.env.NODE_ENV === "production" 
-    ? ["https://realtimechatapp-opal.vercel.app", "https://realtimechat-1-gpm1.onrender.com"]
-    : "http://localhost:5173",
-  credentials: true
-}));
+const corsOptions = {
+  origin: [
+    'https://realtimechatapp-opal.vercel.app', // Your Vercel frontend
+    'https://realtimechat-1-gpm1.onrender.com', // Your Render backend
+    'http://localhost:5173' // For local development
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
